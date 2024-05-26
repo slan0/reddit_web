@@ -25,30 +25,30 @@ Resource            ../Resources/PageObjects/Homepage.robot
 
 # Variables    ../TestData/Reddit.yml
 Suite Setup         Run Keywords
-...                     Open Browser ${URL} ${BROWSER}
+...                     Open Browser   ${URL}   ${BROWSER}
 ...                     AND
 ...                     Maximize Browser Window
 Suite Teardown      Close Browser
 
 
 *** Variables ***
-${URL} https://www.reddit.com
-${BROWSER} Chrome
-${USERNAME} your_username
-${PASSWORD} your_password
-${logo_element} reddit-logo
-${search_box} input[name='q']
+${URL}            https://www.reddit.com
+${BROWSER}        Chrome
+${USERNAME}       your_username
+${PASSWORD}       your_password
+${logo_element}   reddit-logo
+${search_box}     input[name='q']
 
 
 *** Test Cases ***
 My test
-Given  I navigate to homepage
-And    I get dom of search
+  Given I navigate to homepage
+#  And I get dom of search
 
 
 *** Keywords ***
 I navigate to homepage
-    [Documentation]    I navigate to homepage
+  [Documentation]    I navigate to homepage
   Wait until keyword succeeds    1s    5s
   ...    Title Should Be    ${page_title}
   Wait until element is visible    ${logo_element}    5s
