@@ -21,6 +21,7 @@
 
 *** Settings ***
 Library             SeleniumLibrary
+Library             ../Resources/Helper.py
 Resource            ../Resources/PageObjects/Homepage.robot
 
 # Variables    ../TestData/Reddit.yml
@@ -43,8 +44,8 @@ ${search_box}     input[name='q']
 *** Test Cases ***
 My test
   Given I navigate to homepage
+  Get Shadow
 #  And I get dom of search
-
 
 *** Keywords ***
 I navigate to homepage
@@ -64,3 +65,6 @@ I get dom of search
 # Log to console    ${search_dom}
 # Click element    ${search_dom}
 # [Return]    ${search_dom}
+
+Get Shadow
+   ${one}=   Evaluate    Get First Shadow()   modules=Helper
