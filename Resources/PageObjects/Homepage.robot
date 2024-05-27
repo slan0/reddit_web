@@ -4,10 +4,10 @@
 Library    SeleniumLibrary
 
 *** Variables ***
-${page_title}                    Reddit - Dive into anything
-${reddit_logo}                   reddit-logo
-${search_input_js}               document.querySelector('reddit-search-large > form > faceplate-search-input').shadowRoot.querySelector('label > div > span.input-container')
-${accept_all_cookies_button_js}  return document.querySelector('reddit-cookie-banner').shadowRoot.querySelector('div > shreddit-interactable-element#accept-all-cookies-button > button')
+${page_title}                      Reddit - Dive into anything
+${reddit_logo}                     reddit-logo
+${search_input_js}                 document.querySelector('reddit-search-large > form > faceplate-search-input').shadowRoot.querySelector('label > div > span.input-container')
+${accept_all_cookies_button_js}    document.querySelector('reddit-cookie-banner').shadowRoot.querySelector('div > shreddit-interactable-element#accept-all-cookies-button > button')
 
 *** Keywords ***
 Verify Navigation to Homepage
@@ -19,7 +19,7 @@ Verify Navigation to Homepage
 Handle Cookies Pop-up
     [Documentation]    Handle Cookies Pop-up by Accepting All cookies
     ${accept_all_cookies_button}=    Execute Javascript
-    ...    ${accept_all_cookies_button_js}
+    ...    return ${accept_all_cookies_button_js}
     ${status}=    Run Keyword And Return Status
     ...    Element Should Be Visible   ${accept_all_cookies_button}
     IF    '${status}' == 'True'    
