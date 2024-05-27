@@ -1,4 +1,4 @@
-**Comments***
+*** Comments ***
 # Instructions
  #This assignment will test your skills with test automation and your selected language
  #
@@ -25,6 +25,7 @@ Library             SeleniumLibrary
 Resource            ../Resources/PageObjects/Homepage.robot
 Resource            ../Resources/PageObjects/SubReddit.robot
 Resource            ../Resources/PageObjects/Login.robot
+Resource            ../Resources/Helpers/Helper.robot
 Variables           ../TestData/RedditTests.yml
 
 Suite Setup         Run Keywords
@@ -35,60 +36,47 @@ Suite Teardown      Close Browser
 
 
 *** Variables ***
-${URL}                https://www.reddit.com
-${BROWSER}            Chrome
-${USERNAME}           your_username
-${PASSWORD}           your_password
+${URL}          https://www.reddit.com
+${BROWSER}      Chrome
+
 
 *** Test Cases ***
 Scenario: As a user, I would like to be able to upvote or downvote a post
-    Given I navigate to homepage
+    Given I navigated to homepage
     And I accept cookies
-    And I search for sub-reddit   ${sub_reddit_name}
-##${sub_reddit_name}
-#    And I open sub-reddit
-#    And I print out the top most post's title
-#    And I login to the website
-#    When I vote for the post
-#    Then I see my vote is counted
-
-#    And I get dom of search
+    And I search for sub-reddit    ${Sub_Reddit}
+    And I open the sub-reddit
+    And I print out the top most post's title
+    And I login to the website    ${Username}    ${Password}
+    When I vote for the post
+    Then I see my vote is counted
 
 
 *** Keywords ***
-I navigate to homepage
-    [Documentation]    I navigate to homepage
-    Wait until keyword succeeds    1s    5s
-    ...    Title Should Be    ${page_title}
-    Wait until element is visible    ${reddit_logo}    5s
+I navigated to homepage
+    Verify Navigation to Homepage
 
 I accept cookies
-    [Documentation]    
-    ${accept_all_button}=  Execute Javascript    return document.querySelector('reddit-cookie-banner').shadowRoot.querySelector('div > shreddit-interactable-element#accept-all-cookies-button > button')
-    ${status}=   Run Keyword And Return Status
-    ...    Element Should Be Visible    ${accept_all_button}
-    IF   '${status}' == 'True'
-        Click Element    ${accept_all_button}
-    END
-
+    Handle Cookies Pop-up
 
 I search for sub-reddit
-    [Arguments]    ${sub_reddit_name}
-    Execute Javascript    (document.querySelector('reddit-search-large > form > faceplate-search-input').shadowRoot.querySelector('label > div > span.input-container')).click()
-    ${search_field}=   Execute Javascript    return document.querySelector('reddit-search-large > form > faceplate-search-input').shadowRoot.querySelector('label > div > span.input-container > input')
-    ${status}=   Run Keyword And Return Status
-    ...    Element Should Be Visible    ${search_field}
-    IF   '${status}' == 'True'
-        Clear Element Text    ${search_field}
-        Input Text    ${search_field}
-        sleep  5s
-        Capture Page Screenshot
-    ELSE
-        Fail      Locator cannot be found
-    END
+    [Arguments]    ${sub_reddit}
+    Search for Sub-reddit    ${sub_reddit}
 
-Scroll to Element
-    [Arguments]    ${locator}
-    ${x}=  Get Horizontal Position     ${locator}
-    ${y}=  Get Vertical Position       ${locator}
-    Execute Javascript    window.scrollTo(${x}, ${y})
+I open the sub-reddit
+    [Arguments]    ${sub_reddit}
+    Open Sub-reddit   ${sub_reddit}
+
+I print out the top most post's title
+    Obtain And Print Out The Most Top Post Title
+
+I login to the website
+    [Arguments]    ${username}    ${password}
+    Log in to Reddit    ${username}    ${password}
+
+I vote for the post
+    [Arguments]    ${upvote_or_downvote}
+    Vote For Post    ${upvote_or_downvote}
+
+I see my vote is counted
+    Verify the Vote is Counted
