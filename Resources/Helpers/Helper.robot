@@ -1,8 +1,8 @@
 *** Settings ***
-Library    SeleniumLibrary
+Library     SeleniumLibrary
+
 
 *** Keywords ***
-
 Scroll to Element
     [Documentation]    This is to get the element into view by executing the javascript
     [Arguments]    ${locator}

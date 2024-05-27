@@ -28,11 +28,11 @@ Resource            ../Resources/PageObjects/Login.robot
 Resource            ../Resources/Helpers/Helper.robot
 Variables           ../TestData/RedditTests.yml
 
-Suite Setup         Run Keywords
+Test Setup          Run Keywords
 ...                     Open Browser    ${URL}    ${BROWSER}
 ...                     AND
 ...                     Maximize Browser Window
-Suite Teardown      Close Browser
+Test Teardown       Close Browser
 
 
 *** Variables ***
@@ -41,19 +41,33 @@ ${BROWSER}      Chrome
 
 
 *** Test Cases ***
-Scenario: As a user, I would like to be able to upvote or downvote a post
-    Given I navigated to homepage
+Scenario: As a user, I would like to be able to upvote or downvote a post on Reddit
+    [Documentation]    This test case aims to: 1) find and open 'gaming' sub-reddit; 2) print out the most popular
+    ...    post; 3) log in to reddit; downvote or upvote a post.
+    ...    Username and Password: to be passed from terminal during test execution (please refer to the Readme.md file).
+    ...    Test data such as sub-reddit name is passed from the test data file: RedditTests.yml
+    ...    Note: The test lunches the browser, goes to the URL, verifies the homepage, accepts cookies, tries to perform
+    ...    search for a sub-reddit (not working due to locator) and clicks on the Log in button. Please see comments below for
+    ...    more details of what has and has not been automated.
+    Given I am on the Reddit homepage
     And I accept cookies
+# ----below keyword was implemented with the locator found (javascript). But the obtained locator
+# ----from JS execution is not working in Selenium. Hence the test Fails.----#
     And I search for sub-reddit    ${Sub_Reddit}
-    And I open the sub-reddit
-    And I print out the top most post's title
+# ----below KW has dependency on the previous KW hence was not implemented
+#    And I open the sub-reddit
+# ----below KW has dependency on the previous KW hence was not implemented----#
+#    And I print out the top most post's title
+# ----below KW has been partially implemented - it clicks on the Login page----#
     And I login to the website    ${Username}    ${Password}
-    When I vote for the post
-    Then I see my vote is counted
+# ----below KW has dependency on the previous KW hence was not implemented----#
+#    When I vote for the post
+# ----below KW has dependency on the previous KW hence was not implemented----#
+#    Then I see my vote is counted
 
 
 *** Keywords ***
-I navigated to homepage
+I am on the Reddit homepage
     Verify Navigation to Homepage
 
 I accept cookies
@@ -65,14 +79,16 @@ I search for sub-reddit
 
 I open the sub-reddit
     [Arguments]    ${sub_reddit}
-    Open Sub-reddit   ${sub_reddit}
+    Open Sub-reddit    ${sub_reddit}
 
 I print out the top most post's title
     Obtain And Print Out The Most Top Post Title
 
 I login to the website
     [Arguments]    ${username}    ${password}
-    Log in to Reddit    ${username}    ${password}
+    Navigate to Login page
+###    The below KW was not implemented due to not found locator
+#    Log in to Reddit    ${username}    ${password}
 
 I vote for the post
     [Arguments]    ${upvote_or_downvote}
